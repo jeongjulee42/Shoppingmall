@@ -58,7 +58,7 @@ button:hover{
 }
 .shopList{
   margin:auto;
-  width: 80%;
+  width: 60%;
   background-color: var(--color-black);
 }
 .sale{
