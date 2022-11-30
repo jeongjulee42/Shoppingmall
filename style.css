@@ -74,3 +74,6 @@ button:hover{
 .info {
   margin-left: 20px;
 }
+.visible {
+  display: none;
+}

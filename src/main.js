@@ -3,9 +3,13 @@ const buttons = document.querySelector('.buttons');
 
 buttons.addEventListener('click', (event) => {
     if(event.target.tagName == 'BUTTON'){
-        saleList.forEach((sale)=>{shoppingFilter(sale, event.target.dataset.info)});
+        saleList.forEach((sale)=>{
+            shoppingFilter(sale, event.target.dataset.info)
+        });
     } else if(event.target.tagName == 'IMG'){
-        saleList.forEach((sale)=>{shoppingFilter(sale, event.target.parentElement.dataset.info)});
+        saleList.forEach((sale)=>{
+            shoppingFilter(sale, event.target.parentElement.dataset.info)
+        });
     }
 })
 
@@ -18,6 +22,8 @@ buttons.addEventListener('click', (event) => {
 function shoppingFilter(saleBox, condition){
     const srcName = saleBox.children[0].src;
     if(srcName.includes(condition)){
-        console.log(saleBox);
+        saleBox.classList.remove('visible');
+    } else {
+        saleBox.classList.add('visible')
     }
 }
