@@ -1,29 +1,51 @@
-const saleList = document.querySelectorAll('.sale');
-const buttons = document.querySelector('.buttons');
-
-buttons.addEventListener('click', (event) => {
-    if(event.target.tagName == 'BUTTON'){
-        saleList.forEach((sale)=>{
-            shoppingFilter(sale, event.target.dataset.info)
-        });
-    } else if(event.target.tagName == 'IMG'){
-        saleList.forEach((sale)=>{
-            shoppingFilter(sale, event.target.parentElement.dataset.info)
-        });
-    }
-})
-
-
-// 1. 필터 만들기
-// 2. 버튼 누르면 필터 작동하도록 연동
-// 3. 필터에 따라 보여주기
-// 4. 데이터 동적으로 생성
-
-function shoppingFilter(saleBox, condition){
-    const srcName = saleBox.children[0].src;
-    if(srcName.includes(condition)){
-        saleBox.classList.remove('visible');
-    } else {
-        saleBox.classList.add('visible')
-    }
+// Fetch the items from the JSON file
+function loadItems() {
+  return fetch('data/data.json')
+    .then(response => response.json())  //js 객체로 파싱
+    .then(json => json.items);  //item 추출
 }
+
+// Update the list with the given items
+function displayItems(items) {
+  const container = document.querySelector('.items');
+  container.innerHTML = items.map(item => createHTMLString(item)).join('');
+}
+
+// Create HTML list item from the given data item
+function createHTMLString(item) {
+  return `
+    <li class="item">
+        <img src="${item.image}" alt="${item.type}" class="item__thumbnail" />
+        <span class="item__description">${item.gender}, ${item.size}</span>
+    </li>
+    `;
+}
+
+function onButtonClick(event, items) {
+  const dataset = event.target.dataset;
+  const key = dataset.key;
+  const value = dataset.value;
+
+
+  if (key == null || value == null) {
+    return;
+  }
+
+  displayItems(items.filter(item => item[key] === value));
+}
+
+function setEventListeners(items) {
+  const logo = document.querySelector('.logo');
+  const buttons = document.querySelector('.buttons');
+  logo.addEventListener('click', () => displayItems(items));
+  buttons.addEventListener('click', event => onButtonClick(event, items));
+}
+
+// main
+loadItems()
+  .then(items => {
+    displayItems(items);  //새로고침시 보여줌
+    setEventListeners(items);
+  })
+  .catch(console.log);
+
